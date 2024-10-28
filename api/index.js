@@ -1,9 +1,8 @@
 import Express from "express"
 import { PrismaClient } from "@prisma/client";
-import { configDotenv } from "dotenv";
+import dotenv from "dotenv"
 
-
-require('dotenv').config();
+dotenv.config();
 const prisma = new PrismaClient();
 const app = Express()
 let PORT = 8000;
