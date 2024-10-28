@@ -22,3 +22,7 @@ model Event {
   user_id     String
   user        User    @relation(fields: [user_id], references: [user_id])
 }
+
+model test {
+  name    String @unique
+}
