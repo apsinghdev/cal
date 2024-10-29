@@ -72,8 +72,8 @@ app.post("/test-post", async (req, res) => {
     }
 })
 
-app.get("/get-events", async (req, res) => {
-    const {userID} = req.params
+app.get("/get-events/:id", async (req, res) => {
+    const {id: userID} = req.params
     try {
         const events = await prisma.event.findMany({
             where: {
@@ -109,6 +109,20 @@ app.put("/update-event/:id", async (req, res) => {
         res.status(200).json(updateEvent)
     } catch(error) {
         res.status(500).json({ error: "Failed to update event." });
+    }
+})
+
+app.delete("/delete-event/:id", async (req, res) => {
+    const {id: eventID} = req.params
+    try {
+        const deletedEvent = await prisma.event.delete({
+            where: {
+                id: Number(eventID)
+            }
+        })
+        res.status(200).json({ message: "Event deleted successfully", deletedEvent })
+    } catch(error) {
+        res.status(500).json({ error: "Failed to delete event." });
     }
 })
 
