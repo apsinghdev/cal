@@ -72,6 +72,23 @@ app.post("/test-post", async (req, res) => {
     }
 })
 
+app.get("/get-events", async (req, res) => {
+    const {userID} = req.params
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                user_id: userID,
+            }
+        })
+        if (events.length === 0) {
+            res.status(404).json({ message: "No events found for this user." })
+        }
+        res.status(200).json(events)
+    } catch(error) {
+        res.status(500).json({ error: "Internal server error." })
+    }
+})
+
 const startServer = async () => {
     try {
         await prisma.$connect();
