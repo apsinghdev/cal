@@ -89,6 +89,29 @@ app.get("/get-events", async (req, res) => {
     }
 })
 
+app.put("/update-event/:id", async (req, res) => {
+    const {id: eventID} = req.params
+    const {title, datetime, description} = req.body
+
+    const updateData = {}
+
+    if (title) updateData.title = title
+    if (datetime) updateData.datetime = new Date(datetime)
+    if (description) updateData.description = description
+
+    try {
+        const updateEvent = await prisma.event.update({
+            where: {
+                id: Number(eventID)
+            },
+            data: updateData
+        })
+        res.status(200).json(updateEvent)
+    } catch(error) {
+        res.status(500).json({ error: "Failed to update event." });
+    }
+})
+
 const startServer = async () => {
     try {
         await prisma.$connect();
