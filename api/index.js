@@ -1,11 +1,21 @@
 import Express from "express"
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv"
+import router from "./auth.js";
+import cors from "cors";
 
 dotenv.config();
 const prisma = new PrismaClient();
 const app = Express()
 let PORT = 8000;
+
+app.use(cors());
+
+app.use(cors({
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+}));
 
 app.use(Express.json())
 
@@ -125,6 +135,8 @@ app.delete("/delete-event/:id", async (req, res) => {
         res.status(500).json({ error: "Failed to delete event." });
     }
 })
+
+app.use("/api/auth", router)
 
 const startServer = async () => {
     try {
